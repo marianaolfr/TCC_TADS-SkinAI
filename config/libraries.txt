@@ -1,0 +1,7 @@
+numpy*
+pandas*
+pillow*
+futures*
+scikit-learn*
+tensorflow*
+stdin*

@@ -1,4 +1,6 @@
 import os
+import install_libs
+install_libs.install_packages("libraries.txt")
 import numpy as np
 import pandas as pd
 from PIL import Image
