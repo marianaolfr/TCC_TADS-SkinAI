@@ -30,18 +30,17 @@ max_workers = os.cpu_count()
 train_df = pd.DataFrame(columns=['image_path', 'label'])
 test_df = pd.DataFrame(columns=['image_path', 'label'])
 
-# **Skip hidden files ('.DS_Store') during directory listing:**
+# Preencher os dataframes com os caminhos das imagens e seus rótulos
+
 for label, directory in enumerate(os.listdir(train_dir)):
-    if not directory.startswith('.'):  # Skip hidden files
-        for filename in os.listdir(os.path.join(train_dir, directory)):
-            image_path = os.path.join(train_dir, directory, filename)
-            train_df = train_df.concat({'image_path': image_path, 'label': label}, ignore_index=True)
+    for filename in os.listdir(os.path.join(train_dir, directory)):
+        image_path = os.path.join(train_dir, directory, filename)
+        train_df = train_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
 
 for label, directory in enumerate(os.listdir(test_dir)):
-    if not directory.startswith('.'):  # Skip hidden files
-        for filename in os.listdir(os.path.join(test_dir, directory)):
-            image_path = os.path.join(test_dir, directory, filename)
-            test_df = test_df.concat({'image_path': image_path, 'label': label}, ignore_index=True)
+    for filename in os.listdir(os.path.join(test_dir, directory)):
+        image_path = os.path.join(test_dir, directory, filename)
+        test_df = test_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
 
 # Concatenar os dataframes de treino e teste
 df = pd.concat([train_df, test_df], ignore_index=True)
