@@ -1,41 +1,47 @@
 import os
-import install_libs
-install_libs.install_packages("libraries.txt")
 import numpy as np
 import pandas as pd
 from PIL import Image
 import concurrent.futures
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import DenseNet201
+
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Dense, Flatten, Dropout, GlobalAveragePooling2D, Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 from tensorflow.keras.utils import to_categorical
 
-# Diretórios de treino e teste
-train_dir = r'C:\Users\Danni\Downloads\Nova pasta\tcc\Skin cancer ISIC The International Skin Imaging Collaboration\Train'
-test_dir = r'C:\Users\Danni\Downloads\Nova pasta\tcc\Skin cancer ISIC The International Skin Imaging Collaboration\Test'
+# macOS-specific path
+train_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC',
+                         'Skin cancer ISIC The International Skin Imaging Collaboration',
+                         'Train')
+test_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC',
+                       'Skin cancer ISIC The International Skin Imaging Collaboration',
+                       'Test')
 
-# Definir o número máximo de workers para multiprocessing
+# Ensure correct number of CPU cores for multiprocessing
 max_workers = os.cpu_count()
 
-# Criar dataframes para armazenar os caminhos das imagens e seus rótulos
+# Create dataframes for image paths and labels
 train_df = pd.DataFrame(columns=['image_path', 'label'])
 test_df = pd.DataFrame(columns=['image_path', 'label'])
 
-# Preencher os dataframes com os caminhos das imagens e seus rótulos
+# **Skip hidden files ('.DS_Store') during directory listing:**
 for label, directory in enumerate(os.listdir(train_dir)):
-    for filename in os.listdir(os.path.join(train_dir, directory)):
-        image_path = os.path.join(train_dir, directory, filename)
-        train_df = train_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
+    if not directory.startswith('.'):  # Skip hidden files
+        for filename in os.listdir(os.path.join(train_dir, directory)):
+            image_path = os.path.join(train_dir, directory, filename)
+            train_df = train_df.concat({'image_path': image_path, 'label': label}, ignore_index=True)
 
 for label, directory in enumerate(os.listdir(test_dir)):
-    for filename in os.listdir(os.path.join(test_dir, directory)):
-        image_path = os.path.join(test_dir, directory, filename)
-        test_df = test_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
+    if not directory.startswith('.'):  # Skip hidden files
+        for filename in os.listdir(os.path.join(test_dir, directory)):
+            image_path = os.path.join(test_dir, directory, filename)
+            test_df = test_df.concat({'image_path': image_path, 'label': label}, ignore_index=True)
 
 # Concatenar os dataframes de treino e teste
 df = pd.concat([train_df, test_df], ignore_index=True)

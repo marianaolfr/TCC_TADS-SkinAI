@@ -14,8 +14,8 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau
 from tensorflow.keras.utils import to_categorical
 
 # Diretórios de treino e teste
-train_dir = r'C:\Users\Danni\Downloads\Nova pasta\tcc\Skin cancer ISIC The International Skin Imaging Collaboration\Train'
-test_dir = r'C:\Users\Danni\Downloads\Nova pasta\tcc\Skin cancer ISIC The International Skin Imaging Collaboration\Test'
+train_dir = r'/Users/marianaferreira/Documents/Study/IFSP/TCC/Skin cancer ISIC The International Skin Imaging Collaboration/Train'
+test_dir = r'/Users/marianaferreira/Documents/Study/IFSP/TCC/Skin cancer ISIC The International Skin Imaging Collaboration/Test'
 
 # Definir o número máximo de workers para multiprocessing
 max_workers = os.cpu_count()
