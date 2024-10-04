@@ -16,12 +16,10 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau
 from tensorflow.keras.utils import to_categorical
 
 # macOS-specific path
-train_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC',
-                         'Skin cancer ISIC The International Skin Imaging Collaboration',
-                         'Train')
-test_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC',
-                       'Skin cancer ISIC The International Skin Imaging Collaboration',
-                       'Test')
+train_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC/Skin cancer ISIC The International Skin '
+                         'Imaging Collaboration/Train')
+test_dir = os.path.join('/Users/marianaferreira/Documents/Study/IFSP/TCC/Skin cancer ISIC The International Skin '
+                        'Imaging Collaboration/Test')
 
 # Ensure correct number of CPU cores for multiprocessing
 max_workers = os.cpu_count()
@@ -31,16 +29,17 @@ train_df = pd.DataFrame(columns=['image_path', 'label'])
 test_df = pd.DataFrame(columns=['image_path', 'label'])
 
 # Preencher os dataframes com os caminhos das imagens e seus rótulos
-
 for label, directory in enumerate(os.listdir(train_dir)):
     for filename in os.listdir(os.path.join(train_dir, directory)):
         image_path = os.path.join(train_dir, directory, filename)
-        train_df = train_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
+        train_df = pd.concat([train_df, pd.DataFrame({'image_path': [image_path], 'label': [label]})],
+                             ignore_index=True)
 
 for label, directory in enumerate(os.listdir(test_dir)):
     for filename in os.listdir(os.path.join(test_dir, directory)):
         image_path = os.path.join(test_dir, directory, filename)
-        test_df = test_df._append({'image_path': image_path, 'label': label}, ignore_index=True)
+        train_df = pd.concat([train_df, pd.DataFrame({'image_path': [image_path], 'label': [label]})],
+                             ignore_index=True)
 
 # Concatenar os dataframes de treino e teste
 df = pd.concat([train_df, test_df], ignore_index=True)
@@ -131,7 +130,7 @@ def load_single_image(image_path):
     return img_array
 
 # Caminho para a nova imagem
-new_image_path = r"C:\Users\Danni\Downloads\Nova pasta\tcc\IMAGEM_TESTE.jpg"
+new_image_path = r"/Users/marianaferreira/Documents/Study/IFSP/TCC/"
 
 # Carregar a nova imagem
 new_image = load_single_image(new_image_path)
